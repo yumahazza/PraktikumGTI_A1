@@ -1,0 +1,44 @@
+Nama  : Yuma Hazza Yuditama
+NIM   : 24060124120035
+Lab   : A1
+
+// Penjelasan proses pembuatan bayangan
+Proses pembuatan bayangan terjadi di dalam fungsi render() dibagi menjadi dua tahap, yaitu menggambar objek asli, lalu menggambar "kembarannya" sebagai bayangan.  
+1. Menggambar Objek Asli
+  - Dibungkus dengan glPushMatrix() agar posisinya mandiri (tidak merusak objek lain).  
+  - Pencahayaan diaktifkan menggunakan glEnable(GL_LIGHTING) agar objek terlihat 3D dan memantulkan cahaya.  
+  - Diberi warna biru dengan glColor3f(0.0, 0.0, 0.8).  Fungsi draw() dipanggil untuk merender bentuknya ke layar.  
+
+2. Menggambar Bayangan
+  - Dibungkus lagi dengan glPushMatrix().  
+  - Memanggil fungsi glShadowProjection(l, e, n) yang bertugas merusak matriks 3D menjadi pipih (gepeng) menempel pada lantai.  
+  - Posisi dan rotasinya disamakan dengan objek asli agar bayangan bergerak sinkron saat objek diputar.  
+  - Pencahayaan dimatikan dengan glDisable(GL_LIGHTING) karena bayangan tidak memantulkan cahaya, ia murni area gelap.  
+  - Warnanya diubah menjadi abu-abu gelap dengan glColor3f(0.4, 0.4, 0.4).  
+  - Fungsi draw() dipanggil lagi. Jadi, bayangan itu sebenarnya adalah objek 3D yang sama, tapi tergencet matriks proyeksi dan diwarnai gelap.  
+
+// Penjelasan fungsi dan alur glShadowProjection
+Fungsi glShadowProjection(float *l, float *e, float *n) adalah kunci utama dari manipulasi bayangan ini. Fungsinya adalah menghitung matriks transformasi 
+matematika yang memproyeksikan (menembakkan) verteks objek 3D ke sebuah bidang datar (lantai) berdasarkan arah titik cahaya.  
+
+Alur kerjanya:
+1. Menerima Parameter. Fungsi ini menerima 3 array penting:
+  - l: Kordinat posisi sumber cahaya.  
+  - e: Titik sembarang yang ada di bidang lantai.  
+  - n: Vektor normal (garis tegak lurus) yang menghadap ke atas dari bidang lantai.  
+2. Kalkulasi Jarak dan Sudut:
+  - Menghitung nilai d menggunakan dot product antara titik normal n dan posisi cahaya l.  
+  - Menghitung nilai konstanta c untuk menentukan jarak relatif bidang lantai terhadap sumber cahaya.  
+3. Membentuk Matriks 4x4:
+  - OpenGL menggunakan matriks berukuran 4x4 (16 elemen) untuk memanipulasi bentuk 3D. 
+  - Fungsi ini mengisi array 1D mat[16] dengan rumus proyeksi berdasarkan nilai l, n, c, dan d tadi.  
+4. Menerapkan Matriks:
+  - Di akhir fungsi, glMultMatrixf(mat) dipanggil. 
+  - Perintah glMultMatrix(mat) menginstruksikan OpenGL: "Apapun objek yang digambar setelah baris ini, kalikan kordinatnya dengan matriks proyeksi bayangan 
+    yang baru saja dibuat". 
+  - Akibatnya, objek draw() yang dipanggil setelahnya akan gepeng di lantai. 
+
+
+
+
+
