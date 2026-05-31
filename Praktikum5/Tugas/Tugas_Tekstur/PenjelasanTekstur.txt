@@ -1,0 +1,24 @@
+Nama  : Yuma Hazza Yuditama
+NIM   : 24060124120035
+Lab   : A1
+
+Penjelasan Tekstur
+
+Ekstraksi Data Gambar (Reading) 
+Saat program berjalan, fungsi loadBMP() dari file Imageloader.cpp akan dipanggil untuk membaca file .bmp. 
+Fungsi ini akan membedah format biner gambar untuk mengambil informasi panjang, lebar, serta array warna RGB dari setiap piksel gambar tersebut. 
+
+Registrasi ke OpenGL (Binding)
+Data piksel tadi kemudian dikirim ke fungsi loadTexture(). 
+Di sini, OpenGL menggunakan perintah glGenTextures untuk membuatkan ID unik bagi tekstur tersebut, lalu mengaktifkannya lewat glBindTexture. 
+Data warna kemudian ditransfer ke memori grafis menggunakan glTexImage2D.
+
+Pengaturan Filter (Filtering)
+Agar gambar tidak terlihat pecah (pixelated) saat kamera mendekat atau menjauh, program menggunakan glTexParameteri dengan mode GL_LINEAR.
+Hal ini membuat OpenGL melakukan smoothing pada tekstur.  
+
+Pemetaan ke Objek (Mapping)
+Ini adalah tahap eksekusi di dalam drawScene(). Setiap kali kita mau menggambar satu titik sudut kubus dengan glVertex3f, 
+kita "menjahitnya" dengan titik kordinat dari gambar menggunakan glTexCoord2f(x, y). 
+Koordinat tekstur ini bernilai dari 0.0 (ujung) hingga 1.0 (ujung lainnya), sehingga gambar terbentang pas di satu sisi quads.  
+
